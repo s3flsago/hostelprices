@@ -1,0 +1,12 @@
+{
+    "cities": {
+        "Lisbon": {
+            "country": "Portugal",
+            "id": 725
+        },
+        "Seville": {
+            "country": "Spain",
+            "id": 1565
+        }
+    }
+}
