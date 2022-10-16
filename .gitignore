@@ -1,4 +1,7 @@
 *.log
-dist
-build
+logs/
+dist/
+build/
 *.egg-info
+geckodriver.log
+*cpython*

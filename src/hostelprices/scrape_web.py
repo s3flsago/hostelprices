@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
@@ -10,10 +12,9 @@ from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 from webdriver_manager.firefox import GeckoDriverManager
 
-from hostelprices.utils import Util
+from hostelprices.utils import Utils
 
-
-class LoadData():
+class ScrapeWeb():
 
     def __init__(self):
         return 
@@ -23,7 +24,15 @@ class LoadData():
     def loadSoup(cls, url):
         options = Options()
         options.headless = True
-        driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
+
+        log_dir = Utils.logPath()
+        log_path = os.path.join(log_dir, 'geckodriver.log')
+
+        driver = webdriver.Firefox(
+            service=Service(GeckoDriverManager().install()), options=options,
+            log_path=log_path
+            )
+
         driver.get(url)  
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         driver.quit()
@@ -95,8 +104,8 @@ class LoadData():
         if not date_to:
             date_to = date_from + timedelta(days=duration)
 
-        date_from = Util.formatDate(date_from)
-        date_to = Util.formatDate(date_to)
+        date_from = Utils.formatDate(date_from)
+        date_to = Utils.formatDate(date_to)
         url = (
             f'https://www.hostelworld.com/s?q={city},%20{country}&country={country}&city={city}&'
             f'type=city&id={id}&from={date_from}&to={date_to}&guests=1&page={page}'
@@ -119,6 +128,7 @@ class LoadData():
         cls, city_list=None, date_from_list=None, duration_list=None, 
         max_pages=None,
         ):
+
         dfs = []
         for city in city_list:
             for date_from in date_from_list:
