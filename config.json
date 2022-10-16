@@ -1,5 +1,15 @@
 {
     "mongo_client": "mongodb+srv://s3flsago:Nowitzki9@cluster0.cxdukna.mongodb.net/test",
     "data_base_name": "HOSTEL_PRICE_DATA",
-    "collection_name": "price_coll"
+    "collection_name": "price_coll",
+    "city_selection": [
+        "Lisbon"
+    ],
+    "date_selection": [
+        "2022-11-13"
+    ],
+    "duration_selection": [
+        2
+    ],
+    "max_pages": 1
 }

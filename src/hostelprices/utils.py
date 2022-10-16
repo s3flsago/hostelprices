@@ -2,6 +2,8 @@ import git
 import os 
 import json
 
+from datetime import datetime
+
 class Utils():
 
     @staticmethod
@@ -28,9 +30,20 @@ class Utils():
         config_path = os.path.join(cls.rootPath(), 'config.json')
         return config_path
     
+    
+    @staticmethod
+    def strToDatetime(date_str):
+        date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+        return date_obj
+    
 
     @classmethod
     def fromConfig(cls, key):
         with open(cls.configPath(), 'r') as f:
             config_data = json.load(f)
-        return config_data[key]
+        val = config_data[key]
+
+        if key=='date_selection':
+            val = [cls.strToDatetime(val_i) for val_i in val]
+
+        return val
