@@ -30,5 +30,5 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: run workflow
-        run: python -c "import selenium; import sys; print(os.system('ls -l'))"
+        run: python -c "import selenium; import os; print(os.system('ls -l'))"
 
