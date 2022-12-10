@@ -6,5 +6,6 @@ pandas
 pymongo
 datetime
 beautifulsoup4
+matplotlib
 
 
