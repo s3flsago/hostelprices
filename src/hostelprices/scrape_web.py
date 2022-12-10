@@ -86,7 +86,6 @@ class ScrapeWeb():
                 distance = np.nan
                 for string in card_split:
                     try:
-                        rating_candidate = float(string)
                         if (float(string)<=10) and (float(string)>=0):
                             rating = float(string)
                     except:
