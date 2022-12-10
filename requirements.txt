@@ -1,3 +1,10 @@
 selenium
 webdriver-manager
 gitPython
+numpy
+pandas
+pymongo
+datetime
+beautifulsoup4
+
+
