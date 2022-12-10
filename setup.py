@@ -3,7 +3,7 @@ import os
 
 pwd = os.getcwd()
 
-module_path = f"{pwd}\src"
+module_path = os.path.join(pwd, 'src')
 print(module_path)
 sys.path.insert(0, module_path)
 
