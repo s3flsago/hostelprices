@@ -15,7 +15,7 @@ jobs:
     steps:
 
     - uses: actions/checkout@v3
-    
+
     - name: setup python
       uses: actions/setup-python@v3
       with:
@@ -27,4 +27,4 @@ jobs:
         pip install -r requirements.txt
 
     - name: test with unittest
-      run: python -m unittest -m discover .
+      run: python -m unittest
