@@ -71,7 +71,8 @@ class ScrapeWeb():
                 card_split = card.get_text().split()
 
                 card_split = cls.correct(card_split)
-
+                print(card_split)
+                print()
                 ind_dorms = card_split.index('Dorms')
                 ind_price = ind_dorms + 2
 
@@ -79,7 +80,12 @@ class ScrapeWeb():
                 if len(card_split)>ind_dorms+3:
                     if '€' in card_split[ind_dorms+3]:
                         ind_price = ind_dorms + 3
-                    
+                if card_split[ind_price][1:]=='S33':
+                    print()
+                    print(card_split[ind_price])
+                    print()
+                    print(card_split)
+                    print()
                 price = float(card_split[ind_price][1:])
 
                 rating = np.nan
