@@ -38,6 +38,23 @@ class ScrapeWeb():
         driver.quit()
 
         return soup
+    
+    @staticmethod
+    def correct(card_split):
+        split_new = []
+        for entry in card_split:
+            if ('Dorms' in entry): # if discount, then it could be e.g. '-5%Dorms'
+                split_new.append('Dorms')
+            elif ('From' in entry): # if discount, then it could be e.g. '-From€21€20'
+                split_new.append('From')
+
+                entry_split = entry.split('€')
+                if entry_split[-1].isdigit():
+                    split_new.append(f'€{entry_split[-1]}')
+            else:
+                split_new.append(entry)
+        
+        return split_new
 
 
     @classmethod
@@ -53,12 +70,16 @@ class ScrapeWeb():
             if 'Dorms From' in card.get_text():
                 card_split = card.get_text().split()
 
+                card_split = cls.correct(card_split)
+
                 ind_dorms = card_split.index('Dorms')
-                
-                if '€' in card_split[ind_dorms+3]:
-                    ind_price = ind_dorms + 3
-                else:
-                    ind_price = ind_dorms + 2
+                ind_price = ind_dorms + 2
+
+                # if there is a discount, ther first price after "Dorms From" is crossed out...
+                if len(card_split)>ind_dorms+3:
+                    if '€' in card_split[ind_dorms+3]:
+                        ind_price = ind_dorms + 3
+                    
                 price = float(card_split[ind_price][1:])
 
                 rating = np.nan
@@ -133,6 +154,7 @@ class ScrapeWeb():
         for city in city_list:
             for date_from in date_from_list:
                 for duration in duration_list:
+                    logging.info(f'city: {city}, date: {date_from}, duration: {duration}')
                     cond = True
                     page = 0
                     while cond:

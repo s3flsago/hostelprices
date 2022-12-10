@@ -18,8 +18,9 @@ class Database():
         self.coll = coll
         self.limit_KB = 100000
     
+
     def checkSizeLimit(self):
-        if self.totalSize() > self.limit_KB:
+        if self.totalSize > self.limit_KB:
             exceeded = False
         else:
             exceeded = True
@@ -40,11 +41,14 @@ class Database():
         df = pd.DataFrame(list(request))
         return df
     
+
+    @property
     def totalSize(self):
         stats = self.db.command('dbstats')
-        total_KB = stats["storageSize"] + stats["indexSize"]
-        return total_KB
+        total_MB = (stats["storageSize"] + stats["indexSize"]) / (10**6)
+        return total_MB
     
+
     def clear(self):
         self.coll.drop()
 
