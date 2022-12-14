@@ -120,7 +120,7 @@ class ScrapeWeb():
                     split_new.append(f'{currency_str}{entry_split[-1]}')
             else:
                 split_new.append(entry)
-        logging.error(split_new)
+        #logging.error(split_new)
 
         return split_new
 
@@ -131,7 +131,10 @@ class ScrapeWeb():
         ind_price = ind_dorms + 2
 
         price_string = card_split[ind_price]
-        price = float(price_string[1:])
+        if price_string[1:].isdigit():
+            price = float(price_string[1:])
+        else:
+            price = 'np.nan'
 
         return price
 

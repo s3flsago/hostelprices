@@ -29,9 +29,9 @@ class Test(unittest.TestCase):
             )        
         
         city_list = ['Lisbon']#, 'Seville']
-        date_from_list = [datetime(2023, 2, 13), datetime(2023, 2, 1)]
+        date_from_list = [datetime(2023, 2, 13)]#, datetime(2023, 2, 1)]
         duration_list = [2]#, 5]
-        max_pages = 1
+        max_pages = 2
 
         df_all = ScrapeWeb.loop(
             city_list=city_list, date_from_list=date_from_list, duration_list=duration_list, 
