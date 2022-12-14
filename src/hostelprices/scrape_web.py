@@ -78,7 +78,12 @@ class ScrapeWeb():
             if any(char in  card_split[ind_dorms+3] for char in ['$', '€']):
                 ind_price = ind_dorms + 3
         
-        price_string = card_split[ind_price]
+        try:
+            price_string = card_split[ind_price]
+        except IndexError:
+            print(f'index: {price_ind}')
+            print(f'card_split: {card_split}')
+
         if '$' in price_string:
             currency = 'USD'
 
@@ -96,8 +101,6 @@ class ScrapeWeb():
     def extractData(cls, soup):
 
         cards_raw = soup.find_all(class_=['property-card'])
-        logging.error(type(cards_raw))
-        logging.error(cards_raw)
 
         dorm_prices = []
         ratings = []
@@ -108,7 +111,7 @@ class ScrapeWeb():
                 card_split = card.get_text().split()
 
                 card_split = cls.correct(card_split)
-                print(card_split)
+                #print(card_split)
                 
                 price_EUR = cls.priceEur(card_split)
 
