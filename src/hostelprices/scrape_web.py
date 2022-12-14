@@ -80,9 +80,8 @@ class ScrapeWeb():
         
         try:
             price_string = card_split[ind_price]
-        except IndexError:
-            print(f'index: {ind_price}')
-            print(f'card_split: {card_split}')
+        except Exception:
+            raise Exception(f'index: {ind_price} \n card_split: {card_split}')
 
         if '$' in price_string:
             currency = 'USD'
