@@ -78,16 +78,19 @@ class ScrapeWeb():
                 split_new.append('Dorms')
             elif 'From' in entry: # if discount, then it could be e.g. '-From€21€20'
                 split_new.append('From')
-
+                logging.error(split_new)
                 currency_str = '€'
                 if 'US$' in entry:
                     currency_str = 'US$'
+                logging.error(currency_str)
 
                 entry_split = entry.split(currency_str)
+                logging.error(entry_split)
                 if entry_split[-1].isdigit():
                     split_new.append(f'{currency_str}{entry_split[-1]}')
             else:
                 split_new.append(entry)
+        logging.error(split_new)
 
         return split_new
 
@@ -138,25 +141,8 @@ class ScrapeWeb():
                 card_split = card.get_text().split()
 
                 card_split = cls.correct(card_split)
-                #print(card_split)
                 
                 price_EUR = cls.priceEur(card_split)
-
-                # ind_dorms = card_split.index('Dorms')
-                # ind_price = ind_dorms + 2
-
-                # # if there is a discount, ther first price after "Dorms From" is crossed out...
-                # if len(card_split)>ind_dorms+3:
-                #     if any(char in  card_split[ind_dorms+3] for char in ['$', '€']):
-                #         ind_price = ind_dorms + 3
-                
-                # price_string = card_split[ind_price]
-                # if '$' in price_string:
-                #     currency_dollar = True
-                # if currency_dollar:
-                #     price = float(price_string[3:])
-                # else:
-                #     price = float(price_string[1:])
 
                 rating = np.nan
                 distance = np.nan
