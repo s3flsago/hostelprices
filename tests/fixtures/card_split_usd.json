@@ -38,8 +38,17 @@
         "Available",
         "Dorms",
         "From",
-        "US$33",
+        "US€33",
         "View"
     ],
-    "price_usd": 33
+    "price_usd": 33,
+    "entries": [
+        "FromUS$33",
+        "From$33",
+        "FromUS$50US$33",
+        "From$50$33",
+        "FromUS$33",
+        "US$33",
+        "$33"
+    ]
 }

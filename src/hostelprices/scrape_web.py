@@ -49,6 +49,13 @@ class ScrapeWeb():
     def __init__(self):
         return
 
+    @staticmethod
+    def euro(price_usd):
+        """Transform USD to EUR"""
+        rate = CurrencyRates().get_rate('USD', 'EUR')
+        price_eur = price_usd * rate
+        return price_eur
+
 
     @classmethod
     def loadSoup(cls, url):
@@ -69,25 +76,50 @@ class ScrapeWeb():
         driver.quit()
 
         return soup
+    
 
-    @staticmethod
-    def correct(card_split):
+    @classmethod
+    def convertToEur(cls, entry):
+        if '$' in entry:
+            currency_str = '$'
+            entry = entry.replace('US$', currency_str, 3)
+
+            entry_split = entry.split(currency_str)
+            entry_split_eur = []
+            for sub_entry in entry_split:
+                if sub_entry.isdigit():
+                    sub_entry = float(sub_entry)
+                    if currency_str=='$':
+                        sub_entry = cls.euro(sub_entry)
+                    sub_entry = '€' + str(sub_entry)
+
+                entry_split_eur.append(sub_entry)
+            
+            
+            entry_new = ''.join(entry_split_eur)
+        
+        else:
+            entry = entry_new
+        
+        return entry_new
+
+
+    @classmethod
+    def correct(cls, card_split, currency_str='€'):
         split_new = []
+        logging.error(card_split)
         for entry in card_split:
+            entry = cls.convertToEur(entry)
+
             if 'Dorms' in entry: # if discount, then it could be e.g. '-5%Dorms'
                 split_new.append('Dorms')
             elif 'From' in entry: # if discount, then it could be e.g. '-From€21€20'
                 split_new.append('From')
-                logging.error(split_new)
-                currency_str = '€'
-                if '$' in entry:
-                    currency_str = '$'
-                    entry = entry.replace('US$', currency_str, 3)
-                    
-                logging.error(currency_str)
 
                 entry_split = entry.split(currency_str)
+
                 logging.error(entry_split)
+
                 if entry_split[-1].isdigit():
                     split_new.append(f'{currency_str}{entry_split[-1]}')
             else:
@@ -96,35 +128,14 @@ class ScrapeWeb():
 
         return split_new
 
-    @staticmethod
-    def euro(price_usd):
-        """Transform USD to EUR"""
-        rate = CurrencyRates().get_rate('USD', 'EUR')
-        price_eur = price_usd * rate
-        return price_eur
 
     @classmethod
     def priceEur(cls, card_split, currency='EUR'):
         ind_dorms = card_split.index('Dorms')
         ind_price = ind_dorms + 2
 
-        # if there is a discount, ther first price after "Dorms From" is crossed out...
-        if len(card_split)>ind_dorms+3:
-            if any(char in  card_split[ind_dorms+3] for char in ['$', '€']):
-                ind_price = ind_dorms + 3
-        try:
-            price_string = card_split[ind_price]
-        except Exception:
-            raise Exception(f'index: {ind_price} \n card_split: {card_split}')
-
-        if '$' in price_string:
-            currency = 'USD'
-
+        price_string = card_split[ind_price]
         price = float(price_string[1:])
-        if currency=='USD':
-            price = cls.euro(price)
-
-            
 
         return price
 

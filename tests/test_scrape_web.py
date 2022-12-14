@@ -103,6 +103,25 @@ class Test(unittest.TestCase):
 
         assert(price_eur_true==price_eur)
 
+
+    def test_entry_convert_to_eur(self):
+
+        usd_card_split_path = os.path.join(Utils.testFixturesPath(), 'card_split_usd.json')
+        with open(usd_card_split_path) as fp:
+            card_split_dict = json.load(fp)
+        
+        entries = card_split_dict["entries"]
+        price_usd = card_split_dict["price_usd"]
+
+        price_eur_true = ScrapeWeb.euro(price_usd)
+
+        for entry_usd in entries:
+            entry_eur = ScrapeWeb.convertToEur(entry_usd)
+            price_eur = entry_eur.split('€')[-1]
+            assert np.isclose(price_eur_true, float(price_eur), atol=0.05)
+    
+
+
         
         
 
