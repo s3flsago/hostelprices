@@ -83,10 +83,10 @@ class Test(unittest.TestCase):
                 'request_time'
                 ]
                 )
-        assert(len(df)>3)
-        assert(np.median(df["price (EUR)"])>10)
-        assert(np.median(df["rating"])>4)
-        assert(np.median(df["rating"])>4)
+        assert len(df)>3
+        assert np.median(df["price (EUR)"])>10
+        assert np.median(df["rating"])>4
+        assert np.median(df["rating"])>4
         
 
     def test_check_price_eur(self):

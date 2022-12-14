@@ -47,24 +47,31 @@ class ScrapeWeb():
     def correct(card_split):
         split_new = []
         for entry in card_split:
-            if ('Dorms' in entry): # if discount, then it could be e.g. '-5%Dorms'
+            if 'Dorms' in entry: # if discount, then it could be e.g. '-5%Dorms'
                 split_new.append('Dorms')
-            elif ('From' in entry): # if discount, then it could be e.g. '-From€21€20'
+            elif 'From' in entry: # if discount, then it could be e.g. '-From€21€20'
                 split_new.append('From')
 
-                entry_split = entry.split('€')
+                if '€' in entry:
+                    currency_str = '€'
+                elif 'US$' in entry:
+                    currency_str = 'US$'
+                else:
+                    raise ValueError('Unknown Currency')
+
+                entry_split = entry.split(currency_str)
                 if entry_split[-1].isdigit():
-                    split_new.append(f'€{entry_split[-1]}')
+                    split_new.append(f'currency_str{entry_split[-1]}')
             else:
                 split_new.append(entry)
-        
+
         return split_new
     
 
     @staticmethod
     def euro(price_usd):
         rate = CurrencyRates().get_rate('USD', 'EUR')
-        price_eur = price_usd * rate 
+        price_eur = price_usd * rate
         return price_eur
 
     
