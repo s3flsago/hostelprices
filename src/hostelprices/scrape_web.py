@@ -95,11 +95,10 @@ class ScrapeWeb():
 
                 entry_split_eur.append(sub_entry)
             
-            
             entry_new = ''.join(entry_split_eur)
         
         else:
-            entry = entry_new
+            entry_new = entry
         
         return entry_new
 
@@ -107,18 +106,15 @@ class ScrapeWeb():
     @classmethod
     def correct(cls, card_split, currency_str='€'):
         split_new = []
-        logging.error(card_split)
         for entry in card_split:
             entry = cls.convertToEur(entry)
-
+            
             if 'Dorms' in entry: # if discount, then it could be e.g. '-5%Dorms'
                 split_new.append('Dorms')
             elif 'From' in entry: # if discount, then it could be e.g. '-From€21€20'
                 split_new.append('From')
 
                 entry_split = entry.split(currency_str)
-
-                logging.error(entry_split)
 
                 if entry_split[-1].isdigit():
                     split_new.append(f'{currency_str}{entry_split[-1]}')
@@ -151,8 +147,8 @@ class ScrapeWeb():
 
         for card in cards_raw:
             if 'Dorms From' in card.get_text():
-                card_split = card.get_text().split()
 
+                card_split = card.get_text().split()
                 card_split = cls.correct(card_split)
                 
                 price_EUR = cls.priceEur(card_split)

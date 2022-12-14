@@ -98,6 +98,8 @@ class Test(unittest.TestCase):
         card_split_usd = card_split_dict["card_split"] 
         price_usd = card_split_dict["price_usd"]
 
+        card_split_usd = ScrapeWeb.correct(card_split_usd)
+
         price_eur_true = ScrapeWeb.euro(price_usd)
         price_eur = ScrapeWeb.priceEur(card_split_usd)
 
@@ -117,14 +119,12 @@ class Test(unittest.TestCase):
 
         for entry_usd in entries:
             entry_eur = ScrapeWeb.convertToEur(entry_usd)
+            print(entry_eur)
             price_eur = entry_eur.split('€')[-1]
             assert np.isclose(price_eur_true, float(price_eur), atol=0.05)
     
 
 
-        
-        
-
 if __name__ == '__main__':
 
-    unittest.main(price_eur_true, price_eur)
+    unittest.main()
