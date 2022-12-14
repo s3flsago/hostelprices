@@ -34,3 +34,15 @@ class Utils():
         with open(cls.configPath(), 'r') as f:
             config_data = json.load(f)
         return config_data[key]
+    
+    @classmethod
+    def testPath(cls):
+        test_path = os.path.join(cls.rootPath(), 'tests')
+        return test_path
+    
+    
+    @classmethod
+    def testFixturesPath(cls):
+        test_fixtures_path = os.path.join(cls.testPath(), 'fixtures')
+        return test_fixtures_path
+

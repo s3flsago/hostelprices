@@ -8,4 +8,4 @@ datetime
 beautifulsoup4
 matplotlib
 seaborn
-
+forex-python

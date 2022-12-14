@@ -3,9 +3,11 @@ import os
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
+import time
 import logging
 
 from bs4 import BeautifulSoup
+from forex_python.converter import CurrencyRates
 
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
@@ -34,11 +36,13 @@ class ScrapeWeb():
             )
 
         driver.get(url)  
+
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         driver.quit()
 
         return soup
     
+
     @staticmethod
     def correct(card_split):
         split_new = []
@@ -55,12 +59,45 @@ class ScrapeWeb():
                 split_new.append(entry)
         
         return split_new
+    
+
+    @staticmethod
+    def euro(price_usd):
+        rate = CurrencyRates().get_rate('USD', 'EUR')
+        price_eur = price_usd * rate 
+        return price_eur
+
+    
+    @classmethod
+    def priceEur(cls, card_split, currency='EUR'):
+        ind_dorms = card_split.index('Dorms')
+        ind_price = ind_dorms + 2
+
+        # if there is a discount, ther first price after "Dorms From" is crossed out...
+        if len(card_split)>ind_dorms+3:
+            if any(char in  card_split[ind_dorms+3] for char in ['$', '€']):
+                ind_price = ind_dorms + 3
+        
+        price_string = card_split[ind_price]
+        if '$' in price_string:
+            currency = 'USD'
+
+        if currency=='USD':
+            price_usd = float(price_string[3:])
+            price = cls.euro(price_usd)
+        else:
+            price = float(price_string[1:])
+
+        
+        return price
 
 
     @classmethod
     def extractData(cls, soup):
 
         cards_raw = soup.find_all(class_=['property-card'])
+        logging.error(type(cards_raw))
+        logging.error(cards_raw)
 
         dorm_prices = []
         ratings = []
@@ -72,21 +109,24 @@ class ScrapeWeb():
 
                 card_split = cls.correct(card_split)
                 print(card_split)
-                print()
-                ind_dorms = card_split.index('Dorms')
-                ind_price = ind_dorms + 2
+                
+                price_EUR = cls.priceEur(card_split)
 
-                # if there is a discount, ther first price after "Dorms From" is crossed out...
-                if len(card_split)>ind_dorms+3:
-                    if '€' in card_split[ind_dorms+3]:
-                        ind_price = ind_dorms + 3
-                if card_split[ind_price][1:]=='S33':
-                    print()
-                    print(card_split[ind_price])
-                    print()
-                    print(card_split)
-                    print()
-                price = float(card_split[ind_price][1:])
+                # ind_dorms = card_split.index('Dorms')
+                # ind_price = ind_dorms + 2
+
+                # # if there is a discount, ther first price after "Dorms From" is crossed out...
+                # if len(card_split)>ind_dorms+3:
+                #     if any(char in  card_split[ind_dorms+3] for char in ['$', '€']):
+                #         ind_price = ind_dorms + 3
+                
+                # price_string = card_split[ind_price]
+                # if '$' in price_string:
+                #     currency_dollar = True
+                # if currency_dollar:
+                #     price = float(price_string[3:])
+                # else:
+                #     price = float(price_string[1:])
 
                 rating = np.nan
                 distance = np.nan
@@ -100,7 +140,7 @@ class ScrapeWeb():
                     if 'km' in string:
                         distance = float(string[:-2])
 
-                dorm_prices.append(price)
+                dorm_prices.append(price_EUR)
                 ratings.append(rating)
                 distances.append(distance)
             else:
@@ -174,7 +214,6 @@ class ScrapeWeb():
 
                         df = cls.extractData(soup)
 
-                        
                         df = cls.addMetaData(df, city=city, date_from=date_from, duration=duration)
 
                         dfs.append(df)
