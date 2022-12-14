@@ -54,4 +54,9 @@ class Utils():
     @staticmethod
     def fileString(time):
         return time.strftime("%m_%d_%Y-%H_%M")
+    
+
+    @staticmethod
+    def canBeFloat(string):
+        return any([substr.isdigit() for substr in string.split('.')])
 
