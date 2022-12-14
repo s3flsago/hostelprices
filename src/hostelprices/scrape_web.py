@@ -16,10 +16,38 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 from hostelprices.utils import Utils
 
+class SearchParameters():
+
+    def __init__(
+        self, mode='custom',
+        city_list=None, date_from_list=None, duration_list=None, max_pages=None
+        ):
+
+        self.mode = mode
+
+        if mode=='custom':
+            self.city_list = city_list
+            self.date_from_list = date_from_list
+            self.duration_list = duration_list
+            self.max_pages = max_pages
+
+        elif mode=='debug':
+            self.city_list = ['Lisbon']
+            self.date_from_list = [datetime(2023, 2, 13)]
+            self.duration_list = [2]
+            self.max_pages = 1
+        
+        elif mode=='op':
+            self.city_list = ['Lisbon', 'Seville']
+            self.date_from_list = [datetime(2023, 2, 13), datetime(2023, 2, 1)]
+            self.duration_list = [2, 5]
+            self.max_pages = 5
+
+
 class ScrapeWeb():
 
     def __init__(self):
-        return 
+        return
 
 
     @classmethod
@@ -194,13 +222,20 @@ class ScrapeWeb():
     @classmethod
     def loop(
         cls, city_list=None, date_from_list=None, duration_list=None, 
-        max_pages=None,
+        max_pages=None, params=None
         ):
+        
+        if not params:
+            params = SearchParameters(
+                mode='custom', city_list=city_list, date_from_list=date_from_list, 
+                duration_list=duration_list, max_pages=max_pages
+                )
 
         dfs = []
-        for city in city_list:
-            for date_from in date_from_list:
-                for duration in duration_list:
+        print(params.city_list)
+        for city in params.city_list:
+            for date_from in params.date_from_list:
+                for duration in params.duration_list:
                     logging.info(f'city: {city}, date: {date_from}, duration: {duration}')
                     cond = True
                     page = 0
@@ -211,16 +246,12 @@ class ScrapeWeb():
                             city=city, date_from=date_from, duration=duration, page=page
                             )
                         logging.info(url)
-                        
                         soup = cls.loadSoup(url)
-
                         df = cls.extractData(soup)
-
                         df = cls.addMetaData(df, city=city, date_from=date_from, duration=duration)
-
                         dfs.append(df)
 
-                        if (len(df)==0) | (page==max_pages):
+                        if (len(df)==0) | (page==params.max_pages):
                             cond = False
         
         df_all = pd.concat(dfs)

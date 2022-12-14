@@ -9,12 +9,15 @@ class Utils():
         string = f'{date.year}-{date.month}-{date.day}'
         return string
     
-
     @staticmethod
     def rootPath():
         repo_root_path = git.Repo(".", search_parent_directories=True).working_tree_dir
         return repo_root_path
-    
+
+    @staticmethod
+    def activeBranch():
+        branch_str = git.Repo(".", search_parent_directories=True).active_branch.name
+        return branch_str
 
     @classmethod
     def logPath(cls):
@@ -34,15 +37,21 @@ class Utils():
         with open(cls.configPath(), 'r') as f:
             config_data = json.load(f)
         return config_data[key]
-    
+
+
     @classmethod
     def testPath(cls):
         test_path = os.path.join(cls.rootPath(), 'tests')
         return test_path
-    
-    
+
+
     @classmethod
     def testFixturesPath(cls):
         test_fixtures_path = os.path.join(cls.testPath(), 'fixtures')
         return test_fixtures_path
+
+
+    @staticmethod
+    def fileString(time):
+        return time.strftime("%m_%d_%Y-%H_%M")
 
