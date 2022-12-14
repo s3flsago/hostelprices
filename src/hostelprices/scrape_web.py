@@ -92,7 +92,6 @@ class ScrapeWeb():
         else:
             price = float(price_string[1:])
 
-        
         return price
 
 
