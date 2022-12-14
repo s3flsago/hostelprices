@@ -80,8 +80,10 @@ class ScrapeWeb():
                 split_new.append('From')
                 logging.error(split_new)
                 currency_str = '€'
-                if 'US$' in entry:
-                    currency_str = 'US$'
+                if '$' in entry:
+                    currency_str = '$'
+                    entry = entry.replace('US$', currency_str, 3)
+                    
                 logging.error(currency_str)
 
                 entry_split = entry.split(currency_str)
