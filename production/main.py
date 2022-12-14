@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO, format=MSG_FORMAT, datefmt=DATE_FORMAT, 
 def main():
     """main"""
 
-    Datacollection.run()
+    DataCollecting.run('debug')
 
 
 

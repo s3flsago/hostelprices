@@ -232,7 +232,6 @@ class ScrapeWeb():
                 )
 
         dfs = []
-        print(params.city_list)
         for city in params.city_list:
             for date_from in params.date_from_list:
                 for duration in params.duration_list:

@@ -67,9 +67,9 @@ class Test(unittest.TestCase):
         
     
     def test_loop(self):
-        city_list = ['Lisbon', 'Seville']
-        date_from_list = [datetime(2023, 1, 5), datetime(2023, 4, 1)]
-        duration_list = [2, 5]
+        city_list = ['Lisbon']
+        date_from_list = [datetime(2023, 1, 5)]
+        duration_list = [2]
         max_pages = 2
 
         df = ScrapeWeb.loop(
