@@ -28,4 +28,4 @@ jobs:
         pip install .
 
     - name: Run Main
-      run: python -m ./production/main.py
+      run: python ./production/main.py
