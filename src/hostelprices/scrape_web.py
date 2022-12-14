@@ -120,11 +120,11 @@ class ScrapeWeb():
         if '$' in price_string:
             currency = 'USD'
 
+        price = float(price_string[1:])
         if currency=='USD':
-            price_usd = float(price_string[3:])
-            price = cls.euro(price_usd)
-        else:
-            price = float(price_string[1:])
+            price = cls.euro(price)
+
+            
 
         return price
 
