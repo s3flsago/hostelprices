@@ -3,9 +3,11 @@ import os
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
+import time
 import logging
 
 from bs4 import BeautifulSoup
+from forex_python.converter import CurrencyRates
 
 from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
@@ -14,10 +16,45 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 from hostelprices.utils import Utils
 
+class SearchParameters():
+
+    def __init__(
+        self, mode='custom',
+        city_list=None, date_from_list=None, duration_list=None, max_pages=None
+        ):
+
+        self.mode = mode
+
+        if mode=='custom':
+            self.city_list = city_list
+            self.date_from_list = date_from_list
+            self.duration_list = duration_list
+            self.max_pages = max_pages
+
+        elif mode=='debug':
+            self.city_list = ['Lisbon']
+            self.date_from_list = [datetime(2023, 2, 13)]
+            self.duration_list = [2]
+            self.max_pages = 1
+        
+        elif mode=='op':
+            self.city_list = ['Lisbon', 'Seville']
+            self.date_from_list = [datetime(2023, 2, 13), datetime(2023, 2, 1)]
+            self.duration_list = [2, 5]
+            self.max_pages = 5
+
+
 class ScrapeWeb():
 
     def __init__(self):
-        return 
+        return
+
+    @staticmethod
+    def euro(price_usd):
+        """Transform USD to EUR"""
+        rate = CurrencyRates().get_rate('USD', 'EUR')
+        price_eur = price_usd * rate
+        return price_eur
 
 
     @classmethod
@@ -34,27 +71,71 @@ class ScrapeWeb():
             )
 
         driver.get(url)  
+
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         driver.quit()
 
         return soup
     
-    @staticmethod
-    def correct(card_split):
+
+    @classmethod
+    def convertToEur(cls, entry):
+        if '$' in entry:
+            currency_str = '$'
+            entry = entry.replace('US$', currency_str, 3)
+
+            entry_split = entry.split(currency_str)
+            entry_split_eur = []
+            for sub_entry in entry_split:
+                if sub_entry.isdigit():
+                    sub_entry = float(sub_entry)
+                    if currency_str=='$':
+                        sub_entry = cls.euro(sub_entry)
+                    sub_entry = '€' + str(sub_entry)
+
+                entry_split_eur.append(sub_entry)
+            
+            entry_new = ''.join(entry_split_eur)
+        
+        else:
+            entry_new = entry
+        
+        return entry_new
+
+
+    @classmethod
+    def correct(cls, card_split, currency_str='€'):
         split_new = []
         for entry in card_split:
-            if ('Dorms' in entry): # if discount, then it could be e.g. '-5%Dorms'
+            entry = cls.convertToEur(entry)
+            
+            if 'Dorms' in entry: # if discount, then it could be e.g. '-5%Dorms'
                 split_new.append('Dorms')
-            elif ('From' in entry): # if discount, then it could be e.g. '-From€21€20'
+            elif 'From' in entry: # if discount, then it could be e.g. '-From€21€20'
                 split_new.append('From')
 
-                entry_split = entry.split('€')
-                if entry_split[-1].isdigit():
-                    split_new.append(f'€{entry_split[-1]}')
+                entry_split = entry.split(currency_str)
+
+                if Utils.canBeFloat(entry_split[-1]):
+                    split_new.append(f'{currency_str}{entry_split[-1]}')
             else:
                 split_new.append(entry)
-        
+
         return split_new
+
+
+    @classmethod
+    def priceEur(cls, card_split, currency='EUR'):
+        ind_dorms = card_split.index('Dorms')
+        ind_price = ind_dorms + 2
+
+        price_string = card_split[ind_price]
+        if Utils.canBeFloat(price_string[1:]):
+            price = float(price_string[1:])
+        else:
+            price = 'np.nan'
+
+        return price
 
 
     @classmethod
@@ -68,25 +149,16 @@ class ScrapeWeb():
 
         for card in cards_raw:
             if 'Dorms From' in card.get_text():
+
                 card_split = card.get_text().split()
-
                 card_split = cls.correct(card_split)
-
-                ind_dorms = card_split.index('Dorms')
-                ind_price = ind_dorms + 2
-
-                # if there is a discount, ther first price after "Dorms From" is crossed out...
-                if len(card_split)>ind_dorms+3:
-                    if '€' in card_split[ind_dorms+3]:
-                        ind_price = ind_dorms + 3
-                    
-                price = float(card_split[ind_price][1:])
+                
+                price_EUR = cls.priceEur(card_split)
 
                 rating = np.nan
                 distance = np.nan
                 for string in card_split:
                     try:
-                        rating_candidate = float(string)
                         if (float(string)<=10) and (float(string)>=0):
                             rating = float(string)
                     except:
@@ -95,7 +167,7 @@ class ScrapeWeb():
                     if 'km' in string:
                         distance = float(string[:-2])
 
-                dorm_prices.append(price)
+                dorm_prices.append(price_EUR)
                 ratings.append(rating)
                 distances.append(distance)
             else:
@@ -147,13 +219,19 @@ class ScrapeWeb():
     @classmethod
     def loop(
         cls, city_list=None, date_from_list=None, duration_list=None, 
-        max_pages=None,
+        max_pages=None, params=None
         ):
+        
+        if not params:
+            params = SearchParameters(
+                mode='custom', city_list=city_list, date_from_list=date_from_list, 
+                duration_list=duration_list, max_pages=max_pages
+                )
 
         dfs = []
-        for city in city_list:
-            for date_from in date_from_list:
-                for duration in duration_list:
+        for city in params.city_list:
+            for date_from in params.date_from_list:
+                for duration in params.duration_list:
                     logging.info(f'city: {city}, date: {date_from}, duration: {duration}')
                     cond = True
                     page = 0
@@ -164,17 +242,12 @@ class ScrapeWeb():
                             city=city, date_from=date_from, duration=duration, page=page
                             )
                         logging.info(url)
-                        
                         soup = cls.loadSoup(url)
-
                         df = cls.extractData(soup)
-
-                        
                         df = cls.addMetaData(df, city=city, date_from=date_from, duration=duration)
-
                         dfs.append(df)
 
-                        if (len(df)==0) | (page==max_pages):
+                        if (len(df)==0) | (page==params.max_pages):
                             cond = False
         
         df_all = pd.concat(dfs)

@@ -1,10 +1,12 @@
 
 
-name: Main
+name: Tests
 
 on:
-  schedule:
-    - cron: '*/10 * * * *'
+  push:
+    branches:
+      - dev
+      - main
 
 jobs:
   build:
@@ -26,5 +28,5 @@ jobs:
         pip install -r requirements.txt
         pip install .
 
-    - name: Run Main
-      run: python ./production/main.py
+    - name: Run tests
+      run: python -m unittest

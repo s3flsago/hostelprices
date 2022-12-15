@@ -10,6 +10,7 @@ sys.path.insert(0, module_path)
 from hostelprices.scrape_web import ScrapeWeb
 from hostelprices.database import Database
 from hostelprices.utils import Utils
+from hostelprices.datacollecting import DataCollecting
 
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -28,9 +29,9 @@ class Test(unittest.TestCase):
             )        
         
         city_list = ['Lisbon']#, 'Seville']
-        date_from_list = [datetime(2023, 2, 13), datetime(2023, 2, 1)]
+        date_from_list = [datetime(2023, 2, 13)]#, datetime(2023, 2, 1)]
         duration_list = [2]#, 5]
-        max_pages = 1
+        max_pages = 2
 
         df_all = ScrapeWeb.loop(
             city_list=city_list, date_from_list=date_from_list, duration_list=duration_list, 
@@ -51,4 +52,21 @@ class Test(unittest.TestCase):
         plt.close()
 
         DB.clear()
+    
+
+    def test_data_loading_SearchParameters(self):
+        database = DataCollecting.run('debug')
+
+        df_loaded = database.getPandasDf({})
+
+        sns.relplot(
+        data=df_loaded,    
+            x='price (EUR)',
+            y='rating',
+            col='date_from',
+            hue='city'
+            )
+        plt.close()
+
+        database.clear()
 

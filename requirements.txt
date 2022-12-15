@@ -1,3 +1,11 @@
 selenium
 webdriver-manager
-git
+gitPython
+numpy
+pandas
+pymongo
+datetime
+beautifulsoup4
+matplotlib
+seaborn
+forex-python

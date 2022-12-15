@@ -1,8 +1,10 @@
 import pymongo
 import pandas as pd
 import sys
+from datetime import datetime
 
 from hostelprices.scrape_web import ScrapeWeb
+from hostelprices.utils import Utils
 
 
 class Database():
@@ -18,7 +20,12 @@ class Database():
         self.coll = coll
         self.limit_KB = 100000
     
-
+    @staticmethod
+    def GenerateCollectionName():
+        branch_str = Utils.activeBranch()
+        collection_name = f'main_coll-{branch_str}-{Utils.fileString(datetime.now())}'
+        return collection_name
+    
     def checkSizeLimit(self):
         if self.totalSize > self.limit_KB:
             exceeded = False
@@ -51,31 +58,3 @@ class Database():
 
     def clear(self):
         self.coll.drop()
-
-
-# class DataTaking():
-
-#     def __init__(
-#         self, 
-#         database=None, 
-#         city_list=None, data_from_list=None, duration_list=None, max_pages=None,
-#         ):
-#         self.database = database
-#         self.city_list = city_list
-#         self.data_from_list = data_from_list
-#         self.duration_list = duration_list
-#         self.max_pages = max_pages
-    
-#     def run(self):
-#         df = ScrapeWeb.loop(
-#             city_list=self.city_list, date_from_list=self.date_from_list, 
-#             duration_list=self.duration_list, max_pages=self.max_pages
-#             )
-        
-#         self.
-
-
-
-
-    
-
