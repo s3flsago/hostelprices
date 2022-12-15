@@ -4,7 +4,7 @@ name: Main
 
 on:
   schedule:
-    - cron: '5/10 * * * *'
+    - cron: '52 7,20 * * *'
 
 jobs:
   build:
