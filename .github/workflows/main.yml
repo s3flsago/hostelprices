@@ -5,9 +5,9 @@ name: Scheduled Data Taking
 on:
   push:
     branches:
-      - main
+      - dev
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/30 * * * *"
 
 jobs:
   cron:
