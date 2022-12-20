@@ -9,7 +9,7 @@ from hostelprices.utils import Utils
 
 class Database():
 
-    def __init__(self, client_id=None, data_base_name=None, collection_name=None):
+    def __init__(self, client_id=None, data_base_name=None, collection_name=None, overwrite=False):
 
         self.client_id = client_id
         self.data_base_name = data_base_name
@@ -17,12 +17,23 @@ class Database():
 
         client = pymongo.MongoClient(client_id)
         db = client[data_base_name]
-        coll = db[collection_name]
+        if collection_name==None:
+            coll_names  = db.list_collection_names()
+            coll = None
+            coll_list = [db[coll_name] for coll_name in coll_names]
+        else:
+            coll = db[collection_name]
+            coll_list = [coll]
     
         self.client = client
         self.db = db
         self.coll = coll
+        self.coll_list = coll_list
         self.limit_KB = 100000
+
+        if overwrite:
+            self.clear()
+
 
     @property
     def totalSize(self):
@@ -47,6 +58,10 @@ class Database():
     
 
     def addPandasDf(self, df):
+        if self.coll==None:
+            raise ValueError(
+                "Data can only be added if a single collection is selected in the constructor"
+                )
         if self.checkSizeLimit():
             data = df.to_dict("records")
             results = self.coll.insert_many(data)
@@ -55,11 +70,24 @@ class Database():
             raise MemoryError(f'Data base size limit ({self.limit_KB/1000} MB) exceeded.')
     
 
-    def getPandasDf(self, dct=None):
-        request = self.coll.find(dct)
-        df = pd.DataFrame(list(request))
+    def getPandasDf(self, dct={}):
+        if self.coll!=None:
+            request = self.coll.find(dct)
+            df = pd.DataFrame(list(request))
+        else:
+            df_list = []
+            for coll_i in self.coll_list:
+                request_i = coll_i.find(dct)
+                df_i = pd.DataFrame(list(request_i))
+                df_list.append(df_i)
+            df = pd.concat(df_list)
+        df = df.sort_index(ascending=True)
         return df
     
 
     def clear(self):
-        self.coll.drop()
+        if self.coll!=None:
+            self.coll.drop()
+        else:
+            for coll in self.coll_list:
+                coll.drop()
