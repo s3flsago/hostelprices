@@ -29,7 +29,7 @@ jobs:
         pip install .
     
     - name: Authentification
-      run: curl -u s3flsago "https://api.github.com/repos/user/repo/issues?state=closed"
+      run: curl -u s3flsago:Ingwer!2 "https://api.github.com/repos/user/repo/issues?state=closed"
 
     - name: Run tests
       run: python -m unittest
