@@ -28,7 +28,7 @@ jobs:
         pip install .
     
     - name: Authentification
-      run: curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com
+      run: curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com
 
     - name: Run tests
       run: python -m unittest
