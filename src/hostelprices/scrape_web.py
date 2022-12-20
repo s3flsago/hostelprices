@@ -39,9 +39,12 @@ class SearchParameters():
         
         elif mode=='op':
             self.city_list = ['Lisbon', 'Seville']
-            self.date_from_list = [datetime(2023, 2, 13), datetime(2023, 2, 1)]
-            self.duration_list = [2, 5]
+            self.date_from_list = [datetime(2023, 1, 13), datetime(2023, 1, 17)]
+            self.duration_list = [1, 5]
             self.max_pages = 5
+        
+        elif mode=='random':
+            pass
 
 
 class ScrapeWeb():

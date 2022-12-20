@@ -15,7 +15,6 @@ logging.basicConfig(level=logging.INFO, format=MSG_FORMAT, datefmt=DATE_FORMAT, 
 
 
 
-
 class DataCollecting():
 
     @staticmethod

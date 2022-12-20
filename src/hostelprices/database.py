@@ -11,6 +11,10 @@ class Database():
 
     def __init__(self, client_id=None, data_base_name=None, collection_name=None):
 
+        self.client_id = client_id
+        self.data_base_name = data_base_name
+        self.collection_name = collection_name
+
         client = pymongo.MongoClient(client_id)
         db = client[data_base_name]
         coll = db[collection_name]
@@ -19,6 +23,13 @@ class Database():
         self.db = db
         self.coll = coll
         self.limit_KB = 100000
+
+    @property
+    def totalSize(self):
+        stats = self.db.command('dbstats')
+        total_MB = (stats["storageSize"] + stats["indexSize"]) / (10**6)
+        return total_MB
+
     
     @staticmethod
     def GenerateCollectionName():
@@ -26,6 +37,7 @@ class Database():
         collection_name = f'main_coll-{branch_str}-{Utils.fileString(datetime.now())}'
         return collection_name
     
+
     def checkSizeLimit(self):
         if self.totalSize > self.limit_KB:
             exceeded = False
@@ -47,13 +59,6 @@ class Database():
         request = self.coll.find(dct)
         df = pd.DataFrame(list(request))
         return df
-    
-
-    @property
-    def totalSize(self):
-        stats = self.db.command('dbstats')
-        total_MB = (stats["storageSize"] + stats["indexSize"]) / (10**6)
-        return total_MB
     
 
     def clear(self):
