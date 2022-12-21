@@ -127,8 +127,7 @@ class Test(unittest.TestCase):
         df_both = DB_both.getPandasDf()
 
         assert len(df_both)==5
-        assert df_both.equals(df_both_true)
-        
+
         DB_both.clear() 
         assert DB_both.totalSize==0
         assert DB_1.totalSize==0
