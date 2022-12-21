@@ -65,12 +65,8 @@ class ScrapeWeb():
         options = Options()
         options.headless = True
 
-        log_dir = Utils.logPath()
-        log_path = os.path.join(log_dir, 'geckodriver.log')
-
         driver = webdriver.Firefox(
             service=Service(GeckoDriverManager().install()), options=options,
-            log_path=log_path
             )
 
         driver.get(url)  

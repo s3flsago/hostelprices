@@ -29,5 +29,8 @@ jobs:
         pip install -r requirements.txt
         pip install .
 
+    - name: Authentification
+      run: curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com
+
     - name: Run Main
       run: python ./production/main.py

@@ -1,9 +1,0 @@
-{
-    "short": {
-        "city_list": ["Lisbon", "Seville"],
-        "date_from_list": ["datetime(2023, 2, 13)", datetime(2023, 2, 1)],
-        "duration_list": [2, 5],
-        "max_pages": 5
-    }
-
-}
