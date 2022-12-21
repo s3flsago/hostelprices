@@ -60,3 +60,24 @@ class Utils():
     def canBeFloat(string):
         return any([substr.isdigit() for substr in string.split('.')])
 
+
+
+
+class Definitions():
+
+    def __init__(self):
+        self.dict = {
+                '_id': {'col_name': '_id'},
+                'price': {'col_name': 'price (EUR)'},
+                'rating': {'col_name': 'rating'},
+                'distance': {'col_name': 'distance (km)'},
+                'city': {'col_name': 'city'},
+                'date_from': {'col_name': 'date_from'},
+                'duration': {'col_name': 'duration (days)'},
+                'request_time': {'col_name': 'request_time'}
+                }
+
+    
+    def colName(self, key):
+        return self.dict[key]['col_name']
+  

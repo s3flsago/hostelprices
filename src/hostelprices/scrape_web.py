@@ -14,7 +14,7 @@ from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 from webdriver_manager.firefox import GeckoDriverManager
 
-from hostelprices.utils import Utils
+from hostelprices.utils import Utils, Definitions
 
 class SearchParameters():
 
@@ -47,11 +47,17 @@ class SearchParameters():
             pass
 
 
+
+    
+
+
+
 class ScrapeWeb():
 
     def __init__(self):
         return
-
+    
+   
     @staticmethod
     def euro(price_usd):
         """Transform USD to EUR"""
@@ -174,8 +180,13 @@ class ScrapeWeb():
                 ratings.append(np.nan)
                 distances.append(np.nan)
         
+        Defs = Definitions()
         df = pd.DataFrame(
-            {'price (EUR)': dorm_prices, 'rating': ratings, 'distance (km)': distances}
+            {
+                Defs.colName('price'): dorm_prices, 
+                Defs.colName('rating'): ratings, 
+                Defs.colName('distance'): distances
+                }
             )
         df = df.dropna(axis=0)
         
@@ -208,10 +219,11 @@ class ScrapeWeb():
     @classmethod
     def addMetaData(cls, data, city=None, date_from=None, duration=None):
         data_new = data.copy()
-        data_new['city'] = city
-        data_new['date_from'] = date_from
-        data_new['duration (days)'] = duration
-        data_new['request_time'] = datetime.now()
+        Defs = Definitions()
+        data_new[Defs.colName('city')] = city
+        data_new[Defs.colName('date_from')] = date_from
+        data_new[Defs.colName('duration')] = duration
+        data_new[Defs.colName('request_time')] = datetime.now()
         return data_new
 
 
