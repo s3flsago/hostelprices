@@ -13,7 +13,6 @@ from hostelprices.utils import Utils
 from hostelprices.database import Database
 
 
-
 class Test(unittest.TestCase):
 
     def test_setup_database(self):
@@ -94,6 +93,10 @@ class Test(unittest.TestCase):
         data_base_name = 'TEST_DB_multiple_readout'
         collection_name_1 = "test_coll_1"
         collection_name_2 = "test_coll_2"
+
+        DB_both_init = Database(client_id=client_id, data_base_name=data_base_name, overwrite=True)
+        DB_both_init.clear()
+
         DB_1 = Database(
             client_id=client_id, data_base_name=data_base_name, collection_name=collection_name_1,
             overwrite=True
@@ -127,9 +130,9 @@ class Test(unittest.TestCase):
         assert df_both.equals(df_both_true)
         
         DB_both.clear() 
-        assert(DB_both.totalSize==0)
-        assert(DB_1.totalSize==0)
-        assert(DB_2.totalSize==0)
+        assert DB_both.totalSize==0
+        assert DB_1.totalSize==0
+        assert DB_2.totalSize==0
 
 
 if __name__ == '__main__':
