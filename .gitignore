@@ -6,3 +6,4 @@ build/
 geckodriver.log
 *cpython*
 *.pyc
+config_secrets.json

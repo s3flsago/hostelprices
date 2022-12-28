@@ -30,7 +30,9 @@ jobs:
         pip install .
 
     - name: Authentification
-      run: curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com
+      run: |
+      curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com
+      echo curl -I https://api.github.com/users/octocat/orgs
 
     - name: Run Main
       run: python ./production/main.py --mode longterm --mongo_client ${{ secrets.MONGO_CLIENT }}

@@ -28,8 +28,11 @@ class Utils():
     
 
     @classmethod
-    def configPath(cls):
-        config_path = os.path.join(cls.rootPath(), 'config.json')
+    def configPath(cls, secret=False):
+        secret = ''
+        if secret:
+            secret = '_secret'
+        config_path = os.path.join(cls.rootPath(), f'config{secret}.json')
         return config_path
     
 
@@ -37,7 +40,20 @@ class Utils():
     def fromConfig(cls, key):
         with open(cls.configPath(), 'r') as f:
             config_data = json.load(f)
-        return config_data[key]
+
+        if not key in config_data.keys():
+            try:
+                with open(cls.configPath(secret=True), 'r') as f:
+                    config_data = json.load(f)
+            except KeyError:
+                print(
+                    "key not in config.json and not config_secrets.json file. "
+                    "Maybe the value is located in GitHub secrets...")
+        
+        try:
+            return config_data[key]
+        except KeyError:
+            print('Key neither found in config.json nor config_secrets.json')
 
 
     @classmethod
