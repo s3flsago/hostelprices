@@ -47,7 +47,7 @@ class Utils():
                 with open(secrets_path, 'r') as f:
                     config_data = json.load(f)
             elif key=='mongo_client':
-                return os.env["MONGO_CLIENT"]
+                return os.environ["MONGO_CLIENT"]
                 
         
         return config_data[key]
