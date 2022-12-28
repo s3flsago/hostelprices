@@ -79,8 +79,8 @@ class Test(unittest.TestCase):
         
         assert(
             list(df.columns)==[
-                'price (EUR)', 'rating', 'distance (km)', 'city', 'date_from', 'duration (days)',
-                'request_time'
+                'price (EUR)', 'rating', 'distance (km)', 'city', 'date from', 'duration (days)',
+                'request time'
                 ]
                 )
         assert len(df)>3

@@ -14,7 +14,7 @@ from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 from webdriver_manager.firefox import GeckoDriverManager
 
-from hostelprices.utils import Utils, Definitions
+from hostelprices.utils import Utils, Defs
 
 class SearchParameters():
 
@@ -46,9 +46,6 @@ class SearchParameters():
         elif mode=='random':
             pass
 
-
-
-    
 
 
 
@@ -180,7 +177,6 @@ class ScrapeWeb():
                 ratings.append(np.nan)
                 distances.append(np.nan)
         
-        Defs = Definitions()
         df = pd.DataFrame(
             {
                 Defs.colName('price'): dorm_prices, 
@@ -219,7 +215,6 @@ class ScrapeWeb():
     @classmethod
     def addMetaData(cls, data, city=None, date_from=None, duration=None):
         data_new = data.copy()
-        Defs = Definitions()
         data_new[Defs.colName('city')] = city
         data_new[Defs.colName('date_from')] = date_from
         data_new[Defs.colName('duration')] = duration

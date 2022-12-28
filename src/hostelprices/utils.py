@@ -1,6 +1,7 @@
 import git
 import os 
 import json
+from datetime import datetime
 
 class Utils():
 
@@ -55,6 +56,11 @@ class Utils():
     def fileString(time):
         return time.strftime("%m_%d_%Y-%H_%M")
     
+    @staticmethod
+    def dateTime(file_str):
+        return datetime.strptime(file_str, "%m_%d_%Y-%H_%M")
+
+    
 
     @staticmethod
     def canBeFloat(string):
@@ -63,21 +69,32 @@ class Utils():
 
 
 
-class Definitions():
-
-    def __init__(self):
-        self.dict = {
-                '_id': {'col_name': '_id'},
-                'price': {'col_name': 'price (EUR)'},
-                'rating': {'col_name': 'rating'},
-                'distance': {'col_name': 'distance (km)'},
-                'city': {'col_name': 'city'},
-                'date_from': {'col_name': 'date_from'},
-                'duration': {'col_name': 'duration (days)'},
-                'request_time': {'col_name': 'request_time'}
-                }
+class Defs():
 
     
-    def colName(self, key):
-        return self.dict[key]['col_name']
-  
+    dict = {
+        '_id': {'col_name': '_id'},
+        'price': {'col_name': 'price (EUR)'},
+        'rating': {'col_name': 'rating'},
+        'distance': {'col_name': 'distance (km)'},
+        'city': {'col_name': 'city'},
+        'date_from': {'col_name': 'date from'},
+        'duration': {'col_name': 'duration (days)'},
+        'request_time': {'col_name': 'request time'},
+        'time_before': {'col_name': 'days before'},
+        'rating_per_price': {'col_name': 'rating per price'},
+        'collection_name': {'col_name': 'collection'},
+        'collection_time': {'col_name': 'collection time'},
+        }
+
+    @classmethod
+    def colName(cls, key):
+        return cls.dict[key]['col_name']
+    
+
+
+
+
+
+
+    
