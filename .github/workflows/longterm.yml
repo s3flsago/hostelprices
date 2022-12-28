@@ -32,6 +32,7 @@ jobs:
     - name: Authentification
       run: |
         curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com
+        curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com/octocat
         curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com/rate_limit
 
     # - name: Run Main
