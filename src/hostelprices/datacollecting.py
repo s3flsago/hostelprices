@@ -18,9 +18,10 @@ logging.basicConfig(level=logging.INFO, format=MSG_FORMAT, datefmt=DATE_FORMAT, 
 class DataCollecting():
 
     @staticmethod
-    def run(mode):
-
-        client_id = Utils.fromConfig('mongo_client')
+    def run(mode, client_id=None):
+        if not client_id:
+            client_id = Utils.fromConfig('mongo_client')
+            
         data_base_name = Utils.fromConfig('data_base_name')
         collection_name = Database.GenerateCollectionName()
 
