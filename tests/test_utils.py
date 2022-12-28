@@ -26,7 +26,7 @@ import numpy as np
 class Test(unittest.TestCase):
 
     def test_fromConfig(self):
-        secrets_path = os.path.join(Utils.configPath(secrets=True))
+        secrets_path = os.path.join(Utils.configPath(secret=True))
         if os.path.exists(secrets_path):
             Utils.fromConfig('mongo_client')
 
