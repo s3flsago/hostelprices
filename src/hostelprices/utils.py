@@ -43,13 +43,13 @@ class Utils():
             config_data = json.load(f)
         if not (key in config_data.keys()):
             secrets_path = cls.configPath(secret=True)
+            print(secrets_path)
             if os.path.exists(secrets_path):
                 with open(secrets_path, 'r') as f:
                     config_data = json.load(f)
             elif key=='mongo_client':
                 return os.environ["MONGO_CLIENT"]
                 
-        
         return config_data[key]
 
 
