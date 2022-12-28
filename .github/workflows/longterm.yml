@@ -35,4 +35,4 @@ jobs:
 
     - name: Run Main
       run: |
-        python ./production/main.py --mode longterm --mongo_client ${{ secrets.MONGO_CLIENT }}
+        python ./production/main.py --mode longterm --title longterm00 --mongo_client ${{ secrets.MONGO_CLIENT }}

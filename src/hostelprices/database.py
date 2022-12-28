@@ -56,9 +56,11 @@ class Database():
 
     
     @staticmethod
-    def GenerateCollectionName():
+    def GenerateCollectionName(title=None):
+        if not title:
+            title = ''
         branch_str = Utils.activeBranch()
-        collection_name = f'main_coll-{branch_str}-{Utils.fileString(datetime.now())}'
+        collection_name = f'main_coll-{title}-{branch_str}-{Utils.fileString(datetime.now())}'
         return collection_name
     
 

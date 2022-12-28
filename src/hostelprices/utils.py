@@ -1,6 +1,7 @@
 import git
 import os 
 import json
+import logging
 from datetime import datetime
 
 class Utils():
@@ -29,10 +30,10 @@ class Utils():
 
     @classmethod
     def configPath(cls, secret=False):
-        secret = ''
+        secret_str = ''
         if secret:
-            secret = '_secret'
-        config_path = os.path.join(cls.rootPath(), f'config{secret}.json')
+            secret_str = '_secrets'
+        config_path = os.path.join(cls.rootPath(), f'config{secret_str}.json')
         return config_path
     
 
@@ -40,20 +41,12 @@ class Utils():
     def fromConfig(cls, key):
         with open(cls.configPath(), 'r') as f:
             config_data = json.load(f)
-
-        if not key in config_data.keys():
-            try:
-                with open(cls.configPath(secret=True), 'r') as f:
-                    config_data = json.load(f)
-            except KeyError:
-                print(
-                    "key not in config.json and not config_secrets.json file. "
-                    "Maybe the value is located in GitHub secrets...")
+        if not (key in config_data.keys()):
+            with open(cls.configPath(secret=True), 'r') as f:
+                config_data = json.load(f)
         
-        try:
-            return config_data[key]
-        except KeyError:
-            print('Key neither found in config.json nor config_secrets.json')
+        return config_data[key]
+
 
 
     @classmethod
