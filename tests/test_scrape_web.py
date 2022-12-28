@@ -17,7 +17,7 @@ from selenium.webdriver.firefox.options import Options
 from webdriver_manager.firefox import GeckoDriverManager
 from hostelprices.utils import Utils
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 import numpy as np
 
@@ -68,7 +68,7 @@ class Test(unittest.TestCase):
     
     def test_loop(self):
         city_list = ['Lisbon']
-        date_from_list = [datetime(2023, 1, 5)]
+        date_from_list = [datetime.today()+timedelta(days=10)]
         duration_list = [2]
         max_pages = 2
 
