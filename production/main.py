@@ -4,10 +4,10 @@ import sys
 import argparse
 import logging
 
-# from datetime import datetime
-# from hostelprices.scrape_web import ScrapeWeb
-# from hostelprices.utils import Utils
-# from hostelprices.datacollecting import DataCollecting
+from datetime import datetime
+from hostelprices.scrape_web import ScrapeWeb
+from hostelprices.utils import Utils
+from hostelprices.datacollecting import DataCollecting
 
 
 MSG_FORMAT = "%(asctime)s|%(levelname)s|%(filename)s:%(lineno)d| %(message)s"
