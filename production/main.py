@@ -16,12 +16,13 @@ logging.basicConfig(level=logging.INFO, format=MSG_FORMAT, datefmt=DATE_FORMAT, 
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--mongo_client", help="MongoDB client ID. Careful: Contains password")
+parser.add_argument("--mode", help="One of the modes from scrape_web.SearchParameters")
 args = parser.parse_args()
 
 def main():
     """main"""
 
-    DataCollecting.run('op', client_id=args.mongo_client)
+    DataCollecting.run(args.mode, client_id=args.mongo_client)
 
 
 

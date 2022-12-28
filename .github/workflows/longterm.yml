@@ -7,7 +7,7 @@ on:
     branches:
       - dev
   schedule:
-    - cron: "0 8,20 * * *"
+    - cron: "0 15 * * *"
 
 jobs:
   cron:
@@ -33,4 +33,4 @@ jobs:
       run: curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com
 
     - name: Run Main
-      run: python ./production/main.py --mode op --mongo_client ${{ secrets.MONGO_CLIENT }}
+      run: python ./production/main.py --mode longterm --mongo_client ${{ secrets.MONGO_CLIENT }}

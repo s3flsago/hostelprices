@@ -61,7 +61,6 @@ class Utils():
         return datetime.strptime(file_str, "%m_%d_%Y-%H_%M")
 
     
-
     @staticmethod
     def canBeFloat(string):
         return any([substr.isdigit() for substr in string.split('.')])
