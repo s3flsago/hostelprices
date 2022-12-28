@@ -44,9 +44,9 @@ class Utils():
         if not (key in config_data.keys()):
             secrets_path = cls.configPath(secret=True)
             if os.path.exists(secrets_path):
-                with open(, 'r') as f:
+                with open(secrets_path, 'r') as f:
                     config_data = json.load(f)
-            elif key=='client_it':
+            elif key=='mongo_client':
                 return os.env["MONGO_CLIENT"]
                 
         
