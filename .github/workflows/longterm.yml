@@ -1,19 +1,21 @@
 
 
-name: Tests
+name: Scheduled Longterm Data Taking
 
 on:
   push:
     branches:
       - dev
-      - main
+  schedule:
+    - cron: "0 15 * * *"
 
 jobs:
-  build:
+  cron:
 
     runs-on: ubuntu-latest
 
     steps:
+
     - uses: actions/checkout@v3
 
     - name: setup python
@@ -26,11 +28,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install .
-    
-    - name: Authentification
-      run: curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com
 
-    - name: Run tests
-      run: python -m unittest
-      env:
-        MONGO_CLIENT: ${{ secrets.MONGO_CLIENT }}
+    - name: Authentification
+      run: |
+        curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com
+
+    - name: Run Main
+      run: |
+        python ./production/main.py --mode longterm --title longterm00 --mongo_client ${{ secrets.MONGO_CLIENT }}

@@ -1,8 +1,8 @@
 selenium
 webdriver-manager
 gitPython
-numpy
-pandas
+numpy==1.23.1
+pandas==1.4.3
 pymongo
 datetime
 beautifulsoup4

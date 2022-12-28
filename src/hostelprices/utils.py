@@ -1,6 +1,8 @@
 import git
 import os 
 import json
+import logging
+from datetime import datetime
 
 class Utils():
 
@@ -27,8 +29,11 @@ class Utils():
     
 
     @classmethod
-    def configPath(cls):
-        config_path = os.path.join(cls.rootPath(), 'config.json')
+    def configPath(cls, secret=False):
+        secret_str = ''
+        if secret:
+            secret_str = '_secrets'
+        config_path = os.path.join(cls.rootPath(), f'config{secret_str}.json')
         return config_path
     
 
@@ -36,7 +41,17 @@ class Utils():
     def fromConfig(cls, key):
         with open(cls.configPath(), 'r') as f:
             config_data = json.load(f)
+        if not (key in config_data.keys()):
+            secrets_path = cls.configPath(secret=True)
+            if os.path.exists(secrets_path):
+                with open(secrets_path, 'r') as f:
+                    config_data = json.load(f)
+            elif key=='mongo_client':
+                return os.environ["MONGO_CLIENT"]
+                
+        
         return config_data[key]
+
 
 
     @classmethod
@@ -55,7 +70,11 @@ class Utils():
     def fileString(time):
         return time.strftime("%m_%d_%Y-%H_%M")
     
+    @staticmethod
+    def dateTime(file_str):
+        return datetime.strptime(file_str, "%m_%d_%Y-%H_%M")
 
+    
     @staticmethod
     def canBeFloat(string):
         return any([substr.isdigit() for substr in string.split('.')])
@@ -63,21 +82,32 @@ class Utils():
 
 
 
-class Definitions():
-
-    def __init__(self):
-        self.dict = {
-                '_id': {'col_name': '_id'},
-                'price': {'col_name': 'price (EUR)'},
-                'rating': {'col_name': 'rating'},
-                'distance': {'col_name': 'distance (km)'},
-                'city': {'col_name': 'city'},
-                'date_from': {'col_name': 'date_from'},
-                'duration': {'col_name': 'duration (days)'},
-                'request_time': {'col_name': 'request_time'}
-                }
+class Defs():
 
     
-    def colName(self, key):
-        return self.dict[key]['col_name']
-  
+    dict = {
+        '_id': {'col_name': '_id'},
+        'price': {'col_name': 'price (EUR)'},
+        'rating': {'col_name': 'rating'},
+        'distance': {'col_name': 'distance (km)'},
+        'city': {'col_name': 'city'},
+        'date_from': {'col_name': 'date from'},
+        'duration': {'col_name': 'duration (days)'},
+        'request_time': {'col_name': 'request time'},
+        'time_before': {'col_name': 'days before'},
+        'rating_per_price': {'col_name': 'rating per price'},
+        'collection_name': {'col_name': 'collection'},
+        'collection_time': {'col_name': 'collection time'},
+        }
+
+    @classmethod
+    def colName(cls, key):
+        return cls.dict[key]['col_name']
+    
+
+
+
+
+
+
+    

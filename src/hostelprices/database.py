@@ -4,7 +4,7 @@ import sys
 from datetime import datetime
 
 from hostelprices.scrape_web import ScrapeWeb
-from hostelprices.utils import Utils
+from hostelprices.utils import Utils, Defs
 
 
 class Database():
@@ -14,25 +14,38 @@ class Database():
         self.client_id = client_id
         self.data_base_name = data_base_name
         self.collection_name = collection_name
+        
 
         client = pymongo.MongoClient(client_id)
         db = client[data_base_name]
+        self.client = client
+        self.db = db
         if collection_name==None:
-            coll_names  = db.list_collection_names()
+            self.coll_names  = db.list_collection_names()
             coll = None
-            coll_list = [db[coll_name] for coll_name in coll_names]
+            coll_list = [db[coll_name] for coll_name in  self.coll_names]
         else:
             coll = db[collection_name]
             coll_list = [coll]
     
-        self.client = client
-        self.db = db
+       
         self.coll = coll
         self.coll_list = coll_list
         self.limit_KB = 100000
 
         if overwrite:
             self.clear()
+    
+
+    def filterCollections(self, contains='', contains_not='no_meaning'):
+        coll_names_new = []
+        colls_new = []
+        for ind, coll_name in enumerate(self.coll_names):
+            if (contains in coll_name) & (not contains_not in coll_name):
+                coll_names_new.append(coll_name)
+                colls_new.append(self.coll_list[ind])
+        self.coll_names = coll_names_new
+        self.coll_list = colls_new
 
 
     @property
@@ -43,12 +56,24 @@ class Database():
 
     
     @staticmethod
-    def GenerateCollectionName():
+    def GenerateCollectionName(title=None):
+        if not title:
+            title = ''
         branch_str = Utils.activeBranch()
-        collection_name = f'main_coll-{branch_str}-{Utils.fileString(datetime.now())}'
+        collection_name = f'main_coll-{title}-{branch_str}-{Utils.fileString(datetime.now())}'
         return collection_name
     
 
+    @staticmethod
+    def queryDateFromCollName(coll_name):
+        date_str = '-'.join(coll_name.split('-')[-2:])
+        try:
+            t_query = Utils.dateTime(date_str)
+        except Exception:
+            t_query = None
+        return t_query
+
+    
     def checkSizeLimit(self):
         if self.totalSize > self.limit_KB:
             exceeded = False
@@ -70,18 +95,23 @@ class Database():
             raise MemoryError(f'Data base size limit ({self.limit_KB/1000} MB) exceeded.')
     
 
-    def getPandasDf(self, dct={}):
+    def getPandasDf(self, dct={}, return_hostel_df=True):
         if self.coll!=None:
             request = self.coll.find(dct)
             df = pd.DataFrame(list(request))
+            df[Defs.colName('collection_name')] = self.collection_name
+            df[Defs.colName('collection_time')] = self.queryDateFromCollName(self.collection_name)
         else:
             df_list = []
-            for coll_i in self.coll_list:
+            for coll_i, coll_name_i in zip(self.coll_list, self.coll_names):
                 request_i = coll_i.find(dct)
                 df_i = pd.DataFrame(list(request_i))
+                df_i[Defs.colName('collection_name')] = coll_name_i
+                df_i[Defs.colName('collection_time')] = self.queryDateFromCollName(coll_name_i)
                 df_list.append(df_i)
             df = pd.concat(df_list)
         df = df.sort_index(ascending=True)
+
         return df
     
 
