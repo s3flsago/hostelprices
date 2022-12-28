@@ -45,7 +45,7 @@ class SearchParameters():
         
         elif mode=='longterm':
             self.city_list = ['Lisbon', 'Seville']
-            self.date_from_list = [datetime.today + timedelta(days=x) for x in range(1,3)]
+            self.date_from_list = [datetime.today() + timedelta(days=x) for x in range(1,3)]
             self.duration_list = [1, 5]
             self.max_pages = 3
         

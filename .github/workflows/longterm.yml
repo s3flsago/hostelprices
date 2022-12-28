@@ -1,6 +1,6 @@
 
 
-name: Scheduled Data Taking
+name: Scheduled Longterm Data Taking
 
 on:
   push:
