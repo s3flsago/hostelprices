@@ -33,4 +33,4 @@ jobs:
       run: curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com
 
     - name: Run Main
-      run: python ./production/main.py ${{ secrets.MONGO_CLIENT }}
+      run: python ./production/main.py --mongo_client ${{ secrets.MONGO_CLIENT }}
