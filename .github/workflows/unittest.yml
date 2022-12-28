@@ -32,3 +32,5 @@ jobs:
 
     - name: Run tests
       run: python -m unittest
+      env:
+        MONGO_CLIENT: ${{ secrets.MONGO_CLIENT }}

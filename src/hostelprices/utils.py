@@ -42,8 +42,13 @@ class Utils():
         with open(cls.configPath(), 'r') as f:
             config_data = json.load(f)
         if not (key in config_data.keys()):
-            with open(cls.configPath(secret=True), 'r') as f:
-                config_data = json.load(f)
+            secrets_path = cls.configPath(secret=True)
+            if os.path.exists(secrets_path):
+                with open(, 'r') as f:
+                    config_data = json.load(f)
+            elif key=='client_it':
+                return os.env["MONGO_CLIENT"]
+                
         
         return config_data[key]
 
