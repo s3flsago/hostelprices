@@ -18,6 +18,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--mongo_client", help="MongoDB client ID. Careful: Contains password")
 parser.add_argument("--mode", help="One of the modes from scrape_web.SearchParameters")
 parser.add_argument("--title", help="Title will be found in collection name later")
+parser.add_argument("--github_token", help="For authentification")
 args = parser.parse_args()
 
 def main():

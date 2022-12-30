@@ -29,12 +29,10 @@ jobs:
         pip install -r requirements.txt
         pip install .
 
-    - name: Authentification
-      run: |
-        curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com
-        curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com/octocat
-        curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com/rate_limit
-
-    # - name: Run Main
+    # - name: Authentification
     #   run: |
-    #     python ./production/main.py --mode longterm --title longterm00 --mongo_client ${{ secrets.MONGO_CLIENT }}
+    #     curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com
+
+    - name: Run Main
+      run: |
+        python ./production/main.py --mode longterm --title longterm00 --mongo_client ${{ secrets.MONGO_CLIENT }} --github_token ${{ secrets.GITHUB_TOKEN }} 
