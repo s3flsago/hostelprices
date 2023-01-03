@@ -3,11 +3,8 @@
 name: Scheduled Longterm Data Taking
 
 on:
-  push:
-    branches:
-      - dev
   schedule:
-    - cron: "0 15 * * *"
+    - cron: "43 8 * * *"
 
 jobs:
   cron:
