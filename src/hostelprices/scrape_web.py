@@ -74,13 +74,6 @@ class ScrapeWeb():
         options = Options()
         options.headless = True
 
-        # github_token = os.environ.get('GITHUB_TOKEN')
-        # if github_token:
-        #     logging.info(github_token)
-        #     logging.info(f'export GH_TOKEN = "{github_token}"')
-        #     os.system(f'export GH_TOKEN = "{github_token}"')
-        logging.error(os.environ.get("GH_TOKEN"))
-
         driver = webdriver.Firefox(
             service=Service(GeckoDriverManager().install()), options=options,
             )
