@@ -31,4 +31,4 @@ jobs:
       run: python -m unittest
       env:
         MONGO_CLIENT_ID: ${{ secrets.MONGO_CLIENT }}
-        GITHUB_TOKEN:  ${{ secrets.GITHUB_TOKEN }} 
+        GH_TOKEN:  ${{ secrets.GITHUB_TOKEN }} 
