@@ -26,7 +26,7 @@ def main():
 
     
 
-    DataCollecting.run(args.mode, client_id=args.mongo_client, title=args.title)
+    DataCollecting.run(args.mode, title=args.title)
 
 
 

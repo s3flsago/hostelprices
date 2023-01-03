@@ -27,7 +27,7 @@ setuptools.setup(
     name='hostelprices',
     version=0.1,
     author="Florian Sagolla",
-    author_email="florian.sagolla@gmx.de.de",
+    author_email="florian.sagolla@gmx.de",
     description=long_description,
     long_description=long_description,
     package_dir={'': 'src'},

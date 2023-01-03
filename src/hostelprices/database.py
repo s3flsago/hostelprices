@@ -9,7 +9,10 @@ from hostelprices.utils import Utils, Defs
 
 class Database():
 
-    def __init__(self, client_id=None, data_base_name=None, collection_name=None, overwrite=False):
+    def __init__(
+        self, client_id=None, data_base_name=None, collection_name=None, 
+        overwrite=False
+        ):
 
         self.client_id = client_id
         self.data_base_name = data_base_name

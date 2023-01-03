@@ -29,10 +29,9 @@ jobs:
         pip install -r requirements.txt
         pip install .
 
-    # - name: Authentification
-    #   run: |
-    #     curl -u s3flsago:${{ secrets.GITHUB_TOKEN }} https://api.github.com
-
     - name: Run Main
+      env:
+          GITHUB_TOKEN:  ${{ secrets.GITHUB_TOKEN }} 
+          MONGO_CLIENT_ID: ${{ secrets.MONGO_CLIENT }}
       run: |
-        python ./production/main.py --mode longterm --title longterm00 --mongo_client ${{ secrets.MONGO_CLIENT }} --github_token ${{ secrets.GITHUB_TOKEN }} 
+        python ./production/main.py --mode longterm --title longterm00

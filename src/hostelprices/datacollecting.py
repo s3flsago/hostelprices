@@ -26,7 +26,7 @@ class DataCollecting():
         collection_name = Database.GenerateCollectionName(title=title)
 
         database = Database(
-            client_id=client_id, data_base_name=data_base_name, collection_name=collection_name
+            client_id=client_id, data_base_name=data_base_name, collection_name=collection_name,
             )
 
         params = SearchParameters(mode=mode)
