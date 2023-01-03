@@ -80,7 +80,7 @@ class ScrapeWeb():
         
         github_token = os.environ.get('GITHUB_TOKEN')
         if github_token:
-            driver.gitHubToken(github_token)
+            webdriver.gitHubToken(github_token)
 
         driver.get(url)  
 
