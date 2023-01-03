@@ -76,6 +76,8 @@ class ScrapeWeb():
 
         github_token = os.environ.get('GITHUB_TOKEN')
         if github_token:
+            logging.info(github_token)
+            logging.info(f'export GH_TOKEN = "{github_token}"')
             os.system(f'export GH_TOKEN = "{github_token}"')
 
         driver = webdriver.Firefox(
