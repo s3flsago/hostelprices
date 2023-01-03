@@ -74,13 +74,13 @@ class ScrapeWeb():
         options = Options()
         options.headless = True
 
+        github_token = os.environ.get('GITHUB_TOKEN')
+        if github_token:
+            os.system(f'export GH_TOKEN = "{github_token}"')
+
         driver = webdriver.Firefox(
             service=Service(GeckoDriverManager().install()), options=options,
             )
-        
-        github_token = os.environ.get('GITHUB_TOKEN')
-        if github_token:
-            webdriver.gitHubToken(github_token)
 
         driver.get(url)  
 
