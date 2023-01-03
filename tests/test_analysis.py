@@ -48,7 +48,7 @@ class Test(unittest.TestCase):
 
         hdf = HostelDF(df_loaded)
 
-        with self.assertRaises(KeyError):
+        with self.assertRaises(AttributeError):
             HostelDF(df_false)
 
         hdf = hdf.filter(hdf[Defs.colName('price')]<30)

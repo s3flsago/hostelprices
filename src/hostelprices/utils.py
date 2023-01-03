@@ -85,18 +85,18 @@ class Defs():
 
     
     dict = {
-        '_id': {'col_name': '_id'},
-        'price': {'col_name': 'price (EUR)'},
-        'rating': {'col_name': 'rating'},
-        'distance': {'col_name': 'distance (km)'},
-        'city': {'col_name': 'city'},
-        'date_from': {'col_name': 'date from'},
-        'duration': {'col_name': 'duration (days)'},
-        'request_time': {'col_name': 'request time'},
-        'time_before': {'col_name': 'days before'},
-        'rating_per_price': {'col_name': 'rating per price'},
-        'collection_name': {'col_name': 'collection'},
-        'collection_time': {'col_name': 'collection time'},
+        '_id': {'col_name': '_id', 'alt_col_names': []},
+        'price': {'col_name': 'price (EUR)', 'alt_col_names': []},
+        'rating': {'col_name': 'rating', 'alt_col_names': []},
+        'distance': {'col_name': 'distance (km)', 'alt_col_names': []},
+        'city': {'col_name': 'city', 'alt_col_names': []},
+        'date_from': {'col_name': 'date from', 'alt_col_names': ['date_from']},
+        'duration': {'col_name': 'duration (days)', 'alt_col_names': []},
+        'request_time': {'col_name': 'request time', 'alt_col_names': ['request_time']},
+        'time_before': {'col_name': 'days before', 'alt_col_names': ['time_before']},
+        'rating_per_price': {'col_name': 'rating per price', 'alt_col_names': []},
+        'collection_name': {'col_name': 'collection', 'alt_col_names': []},
+        'collection_time': {'col_name': 'collection time', 'alt_col_names': ['collection_time']},
         }
 
     @classmethod

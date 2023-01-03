@@ -18,22 +18,27 @@ class HostelDF(pd.DataFrame):
 
 
     def addSecondaryColumns(self):
-        if not Defs.colName('rating_per_price') in self.columns:
-            self[Defs.colName('rating_per_price')] = \
-                self[Defs.colName('rating')] / self[Defs.colName('price')]
+        #if not Defs.colName('rating_per_price') in self.columns:
+        self[Defs.colName('rating_per_price')] = \
+            self[Defs.colName('rating')] / self[Defs.colName('price')]
         
-        if not Defs.colName('time_before') in self.columns:
-            self[Defs.colName('time_before')] = (
-                self[Defs.colName('date_from')] - self[Defs.colName('collection_time')]
-                ).dt.total_seconds().astype(np.float)/(3600*24)
+        #if not Defs.colName('time_before') in self.columns:
+        self[Defs.colName('time_before')] = (
+            self[Defs.colName('date_from')] - self[Defs.colName('collection_time')]
+            ).dt.total_seconds().astype(np.float)/(3600*24)
 
 
     def transform_column_names(self):
-        for col in self.columns:
-            if col in ['date_from', 'date from']:
-                self[Defs.colName('date_from')] = self[col]
-            if col in ['request_time', 'request time']:
-                self[Defs.colName('request_time')] = self[col]
+        
+        for key, info in Defs.dict.items():
+            if not Defs.colName(key) in self.columns:
+                self[Defs.colName(key)] = np.nan
+            for col in self.columns:
+                if col in info["alt_col_names"]:
+                    self[Defs.colName(key)].fillna(self[col], inplace=True)
+                    del self[col]
+        
+
 
 
     def check_colum_names(self):
@@ -67,7 +72,7 @@ class HostelDF(pd.DataFrame):
         df_new = self.filter(condition)
         prices = df_new[Defs.colName('price')].values
         prices = np.sort(prices)
-        avg_price = prices[1:6].mean()
+        avg_price = prices[1:max(len(prices),6)].mean()
         n_hostels = len(prices)
 
         return avg_price, n_hostels

@@ -113,7 +113,7 @@ class Database():
         df = df.sort_index(ascending=True)
 
         return df
-    
+
 
     def clear(self):
         if self.coll!=None:
