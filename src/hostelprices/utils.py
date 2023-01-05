@@ -67,11 +67,19 @@ class Utils():
 
     @staticmethod
     def fileString(time):
-        return time.strftime("%m_%d_%Y-%H_%M")
+        try:
+            return time.strftime("%Y_%m_%d-%H_%M")
+        except Exception:
+            logging.warning('Deprecated date format!')
+            return time.strftime("%m_%d_%Y-%H_%M")
     
     @staticmethod
     def dateTime(file_str):
-        return datetime.strptime(file_str, "%m_%d_%Y-%H_%M")
+        try:
+            return datetime.strptime(file_str, "%Y_%m_%d-%H_%M")
+        except Exception:
+            logging.warning('Deprecated date format!')
+            return datetime.strptime(file_str, "%m_%d_%Y-%H_%M")
 
     
     @staticmethod

@@ -1,5 +1,6 @@
 import unittest
 from copy import deepcopy
+from datetime import datetime, timedelta
 import sys
 import git
 
@@ -265,6 +266,47 @@ class Test(unittest.TestCase):
                 )
 
         DB.enforceCollNames()
+        DB.clear()
+    
+
+    def test_change_date_str(self):
+        client_id = Utils.fromConfig('mongo_client')
+        data_base_name = 'TEST_DATA_BASE'
+
+        DB = Database(client_id=client_id, data_base_name=data_base_name, enforce_coll_name=False)
+        DB.clear()
+
+        collection_names = [
+            "test_coll",
+            "main_coll--dev-12_28_2022-13_17",
+            "main_coll-default-dev-01_03_2023-13_17",
+            "basic",
+            ]
+    
+        for collection_name in collection_names:
+            DB = Database(
+                client_id=client_id, data_base_name=data_base_name, collection_name=collection_name,
+                enforce_coll_name=False
+                )
+            
+            df = pd.DataFrame({'col1': [1,2], 'col2': [10, 20]})
+            
+            DB.addPandasDf(df)
+
+        DB = Database(
+                client_id=client_id, data_base_name=data_base_name, enforce_coll_name=False
+                )
+
+        date_str = Utils.fileString(datetime.today() + timedelta(days=2))
+        coll_names = deepcopy(DB.coll_names)
+        coll_names.remove("test_coll")
+        coll_names.remove("basic")
+
+        DB.changeCollectionTitles(coll_names, date_str=date_str, enforce=True)
+
+        with self.assertRaises(ValueError):
+            DB.changeCollectionTitles(DB.coll_names, date_str=date_str, enforce=False)
+
         DB.clear()
         
 

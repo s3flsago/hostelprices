@@ -14,8 +14,8 @@ class CollectionName():
     def __init__(self, title=None, branch_str=None, date=None, full_name=None):
 
         if full_name:
+            self.extractAttributes(full_name)
             try:
-                self.extractAttributes(full_name)
                 assert all([
                     isinstance(self.title, str), 
                     isinstance(self.branch_str, str), 
@@ -52,7 +52,6 @@ class CollectionName():
 
     def extractAttributes(self, full_name):
         assert len(full_name)>4
-        
        
         attributes = np.array(full_name.split('-'))
         attributes = attributes[attributes!='']
@@ -79,7 +78,10 @@ class Database():
         self.data_base_name = data_base_name
 
         if enforce_coll_name:
-            self.collection_name = CollectionName(full_name=str(collection_name))
+            if collection_name:
+                self.collection_name = CollectionName(full_name=str(collection_name))
+            else:
+                self.collection_name = None
         else:
             self.collection_name = collection_name
         
@@ -128,7 +130,6 @@ class Database():
             print('Could not enforce proper collection name pattern')
 
 
-
     @property
     def totalSize(self):
         stats = self.db.command('dbstats')
@@ -143,18 +144,23 @@ class Database():
     
 
     def changeCollectionTitles(
-        self, change_col_names, title=None, coll_name_obj=None, enforce=True
+        self, change_col_names, title=None, date_str=None, coll_name_obj=None, enforce=True
         ):
         for coll_ind, coll_name in enumerate(self.coll_names):
             if str(coll_name) in change_col_names:
                 if enforce:
                     if not coll_name_obj:
                         new_coll_name = CollectionName(full_name=str(coll_name))
-                        new_coll_name.title = title
+                        if title:
+                            new_coll_name.title = title
+                        if date_str:
+                            new_coll_name.date_str = date_str
                     else:
                         new_coll_name = CollectionName(full_name=str(coll_name_obj))
                 else:
                     if not coll_name_obj:
+                        if not title:
+                            raise ValueError("If you are trying to set the date. put enforce=True")
                         new_coll_name = title
                     else:
                         new_coll_name = CollectionName(full_name=str(coll_name_obj))

@@ -31,4 +31,4 @@ jobs:
           GH_TOKEN:  ${{ secrets.GITHUB_TOKEN }} 
           MONGO_CLIENT_ID: ${{ secrets.MONGO_CLIENT }}
       run: |
-        python ./production/main.py --mode longterm --title longterm00
+        python ./production/main.py --mode longterm --title longterm01
