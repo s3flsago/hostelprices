@@ -33,7 +33,7 @@ class SearchParameters():
 
         elif mode=='debug':
             self.city_list = ['Lisbon']
-            self.date_from_list = [datetime(2023, 2, 13)]
+            self.date_from_list = [datetime.today() + timedelta(days=10)]
             self.duration_list = [2]
             self.max_pages = 1
         
