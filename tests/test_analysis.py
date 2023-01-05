@@ -30,9 +30,9 @@ class Test(unittest.TestCase):
             client_id=client_id, data_base_name=data_base_name, collection_name=collection_name
             )        
         
-        city_list = ['Lisbon']#, 'Seville']
-        date_from_list = [datetime(2023, 2, 13)]#, datetime(2023, 2, 1)]
-        duration_list = [2]#, 5]
+        city_list = ['Lisbon']
+        date_from_list = [datetime(2023, 2, 13)]
+        duration_list = [2]
         max_pages = 2
 
         df_all = ScrapeWeb.loop(
