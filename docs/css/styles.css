@@ -48,7 +48,7 @@ p {
    */
 
 .banner {
-    background: transparent url("/docs/images/alcantara.jpg") 0 0 no-repeat fixed;
+    background: transparent url("../../docs/images/alcantara.jpg") 0 0 no-repeat fixed;
     text-align: center;
     background-size: cover;
     padding-bottom: 0%;
