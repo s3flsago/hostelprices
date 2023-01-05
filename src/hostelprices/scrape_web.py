@@ -45,9 +45,10 @@ class SearchParameters():
         
         elif mode=='longterm':
             self.city_list = ['Lisbon', 'Seville']
-            self.date_from_list = [datetime.today() + timedelta(days=x) for x in range(1,20)]
+            offset_date_from = np.array(list(set((np.logspace(0,1)*10).astype(int)))) - 10
+            self.date_from_list = [datetime.today() + timedelta(days=x) for x in offset_date_from]
             self.duration_list = [1, 5]
-            self.max_pages = 3
+            self.max_pages = 5
         
         elif mode=='random':
             pass
