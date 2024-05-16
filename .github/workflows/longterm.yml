@@ -1,0 +1,34 @@
+
+
+name: Scheduled Longterm Data Taking
+
+on:
+  schedule:
+    - cron: "43 8 * * *"
+
+jobs:
+  cron:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v3
+
+    - name: setup python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install .
+
+    - name: Run Main
+      env:
+          GH_TOKEN:  ${{ secrets.GITHUB_TOKEN }} 
+          MONGO_CLIENT_ID: ${{ secrets.MONGO_CLIENT }}
+      run: |
+        python ./production/main.py --mode longterm --title longterm00

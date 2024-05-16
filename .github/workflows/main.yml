@@ -1,23 +1,21 @@
 
 
-name: First Cron Job
+name: Scheduled Data Taking
 
 on:
   push:
     branches:
-      - main
+      - dev
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "0 8,20 * * *"
 
-     # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "cron"
   cron:
-    # The type of runner that the job will run on
+
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+<<<<<<< HEAD
       # Runs a single command using the runners shell
       - name: checkout repo content
         uses: actions/checkout@v3
@@ -31,4 +29,24 @@ jobs:
           pip install -r requirements.txt
       - name: run workflow
         run: python -c "import selenium; import os; print(os.system('ls -l'))"
+=======
+>>>>>>> 7a6a857929766f56301196042efbc499144b85ff
 
+    - uses: actions/checkout@v3
+
+    - name: setup python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install .
+
+    - name: Run Main
+      env:
+          GH_TOKEN:  ${{ secrets.GITHUB_TOKEN }} 
+          MONGO_CLIENT_ID: ${{ secrets.MONGO_CLIENT }}
+      run: python ./production/main.py --mode op --mongo_client ${{ secrets.MONGO_CLIENT }}
