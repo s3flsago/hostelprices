@@ -34,6 +34,7 @@ class ScrapeWeb():
             )
 
         driver.get(url)  
+
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         driver.quit()
 

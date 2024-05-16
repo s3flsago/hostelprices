@@ -27,7 +27,7 @@ def main():
     duration_list = Utils.fromConfig('duration_selection')
     max_pages = Utils.fromConfig('max_pages')
 
-    df = LoadData.loop(
+    df = ScrapeWeb.loop(
         city_list=city_list, date_from_list=date_from_list, duration_list=duration_list, 
         max_pages=max_pages
     )
